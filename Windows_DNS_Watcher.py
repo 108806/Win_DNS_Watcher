@@ -31,8 +31,8 @@ if args.verbose: print("[INFO] : Verbose mode turned on.")
 
 def isUserAdmin():
     """
-    @return: True if the current user is an 'Admin' whatever that means
-    (root on Unix), otherwise False. This is mostly useless for now, may be removed in next version.
+    @return: True if the current user is an 'Admin'.
+    This is mostly useless for now, may be removed in next version.
     """
 
     if sys.platform == "win32":
