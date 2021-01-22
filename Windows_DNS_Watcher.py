@@ -19,25 +19,20 @@ Important : This doesn't know when the previous match occured if the program was
 so it clears the old cache and starts to log to file always after that clearing it.
 """
 
-
+#Handling all the command line arguments:
 parser = argparse.ArgumentParser()
 parser.add_argument("record_name", help="Target name to be searched, ie www.google.com")
 parser.add_argument("--verbose", default=False, help="Verbose mode, turned off by default.")
 parser.add_argument("--interval", default=30, 
                     help="Time interval measured in seconds between the checks.", type=int)
 args = parser.parse_args()
-
 if args.verbose: print("[INFO] : Verbose mode turned on.")
 
 
 def isUserAdmin():
     """
     @return: True if the current user is an 'Admin' whatever that means
-    (root on Unix), otherwise False.
-
-    Warning: The inner function fails unless you have Windows XP SP2 or
-    higher. The failure causes a traceback to be gen.loged and this
-    function to return False.
+    (root on Unix), otherwise False. This is mostly useless for now, may be removed in next version.
     """
 
     if sys.platform == "win32":
@@ -76,8 +71,9 @@ def eternity(target_record:str, interval:int=30, verbose:bool=False):
     Param : target_record = str, classic format like 'https://google.com'
     Param : interval = int, seconds between flushing cache ang running again, 
     if not provided it is being set to 30 to keep it low profile.
-
-    return : nothing.
+    This is designed as the main loop of the program.
+    
+    @return : nothing.
     """
     def printv(*kwargs):
         if args.verbose: 
@@ -87,12 +83,15 @@ def eternity(target_record:str, interval:int=30, verbose:bool=False):
                     continue
                 for x in arg:
                     print(x)
-
+    
+    #An almost foolproof arg parsing:
     target_record = target_record.strip().replace('\n','').replace('\r\n', '').replace(' ', '')
     printv(target_record)
+    
     cmd = "ipconfig /displaydns | findstr " + target_record         # Old wae, this is tha wae!
 
     getCache = lambda : str(run_command(cmd).communicate()[0])
+    #Paranoid and ugly, but safe even with crappy terminal emulators:
     cleanCache = lambda cache :  cache.replace('  ', ' ').strip().replace('\t', ' ').replace('\r\n', '\t').split('\n')
     
     logfile = open('WIN_DNS_LOG.txt', 'a+', encoding='utf8')
@@ -123,7 +122,9 @@ def eternity(target_record:str, interval:int=30, verbose:bool=False):
 
 
 
-
+#Clearing the DNS Cache for the first run, hence the loop flushes it only after getting a match in DNS register.
 run_command('ipconfig /flushdns')
+
+#All actual tings to skrrah right here:
 if __name__ == "__main__":
     eternity(args.record_name, args.interval, args.verbose)
