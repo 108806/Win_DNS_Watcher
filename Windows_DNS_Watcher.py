@@ -93,8 +93,6 @@ def eternity(target_record:str, interval:int=30, verbose:bool=False):
     getCache = lambda : str(run_command(cmd).communicate()[0])
     #Paranoid and ugly, but safe even with crappy terminal emulators:
     cleanCache = lambda cache :  cache.replace('  ', ' ').strip().replace('\t', ' ').replace('\r\n', '\t').split('\n')
-    
-    logfile = open('WIN_DNS_LOG.txt', 'a+', encoding='utf8')
 
     while True:
         printv(F"[VERBOSE] Main goes on. Refreshing in {interval} s.")
