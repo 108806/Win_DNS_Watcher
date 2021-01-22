@@ -16,7 +16,7 @@ You can also specify a second parameter of time interval measured in seconds bet
 [USAGE] $python3 Windows_DNS.py wikipedia.org --interval=15 --verbose=True
 
 Important : This doesn't know when the previous match occured if the program wasn't running atm, 
-so it clears the old cache and starts to log to file always after that clearing it.
+so it clears the old cache and starts to log to file always after clearing it.
 """
 
 #Handling all the command line arguments:
